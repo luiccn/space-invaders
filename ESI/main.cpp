@@ -32,7 +32,7 @@ bool done = false;
 const int X = 1024;
 const int Y = 768;
 
-int draw_menu(){
+int draw_menu(int pos=1){
     imagem = al_load_bitmap("images/display.png");
     
     if (!imagem)
@@ -49,7 +49,9 @@ int draw_menu(){
     }
     //plano de fundo
     al_draw_bitmap(imagem, 0, 0, 0);
-
+    
+    al_draw_text(choice, al_map_rgb(255, 255, 255), X / 3 - 40, 350+50*pos, ALLEGRO_ALIGN_LEFT, "Q");
+    
     //menu options
       // Texto alinhado à esquerda
     al_draw_text(fonte2, al_map_rgb(0, 235, 0), 10, 10, ALLEGRO_ALIGN_LEFT, "J");
@@ -60,7 +62,6 @@ int draw_menu(){
     al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), X / 3, 500, ALLEGRO_ALIGN_LEFT, menuOptions[2]);
     al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), X / 3, 550, ALLEGRO_ALIGN_LEFT, menuOptions[3]);
     
-    choice = al_load_font("fonts/spacefont.ttf", 36, 0);
     
 
     
@@ -74,13 +75,11 @@ void rotate_sbvb(){
     ALLEGRO_BITMAP *sbvb;
     
     sbvb = al_load_bitmap("images/sbvb.png");
-    imagem = al_load_bitmap("images/display.png");
     
     
     if (!sbvb)
         cout << "error" << endl;
-    if (!imagem)
-        cout << "error" << endl;
+  
     
      float angle=0.5;
     for(int i=0; i< 50; i++){
@@ -91,9 +90,9 @@ void rotate_sbvb(){
         al_flip_display();
         angle+=0.1;
     }
-        al_clear_to_color(al_map_rgb(0, 0, 0));
-        al_draw_bitmap(imagem, 0, 0, 0);
-
+        
+     
+     
 }
         
 
@@ -109,18 +108,13 @@ void rotate_sbvb(){
         fprintf(stderr, "Falha ao carregar fonte.\n");
         return -1;
     }
-     
-    //menu options
-    al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), X / 3, 400, ALLEGRO_ALIGN_LEFT, menuOptions[0]);
-    al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), X / 3, 450, ALLEGRO_ALIGN_LEFT, menuOptions[1]);
-    al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), X / 3, 500, ALLEGRO_ALIGN_LEFT, menuOptions[2]);
-    al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), X / 3, 550, ALLEGRO_ALIGN_LEFT, menuOptions[3]);
     
     choice = al_load_font("fonts/spacefont.ttf", 36, 0);
+  
+     
     
-    al_draw_text(choice, al_map_rgb(255, 255, 255), X / 3 - 40, 400, ALLEGRO_ALIGN_LEFT, "Q");
-        
-    al_flip_display();
+    draw_menu();
+    
     
     ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
     al_register_event_source(event_queue, al_get_keyboard_event_source());
@@ -131,22 +125,22 @@ void rotate_sbvb(){
         al_wait_for_event(event_queue, &events);
         if(events.type == ALLEGRO_EVENT_KEY_DOWN){
             switch(events.keyboard.keycode){
+              
                 case ALLEGRO_KEY_DOWN:
-                    draw_menu();
-                    cout << pos << endl;
-                    pos+=1;
-                    cout << pos << endl;
+                    draw_menu(pos); 
+                    pos+=1;                              
                     if (pos>4)
                         pos = 1;
-                    al_draw_text(choice, al_map_rgb(255, 255, 255), X / 3 - 40, 350+50*pos, ALLEGRO_ALIGN_LEFT, "Q");
+                    draw_menu(pos);
+                    //al_draw_text(choice, al_map_rgb(255, 255, 255), X / 3 - 40, 350+50*pos, ALLEGRO_ALIGN_LEFT, "Q");
                     al_flip_display();
                     break;
                 case ALLEGRO_KEY_UP:
-                    draw_menu();
-                    pos-=1;
+                    draw_menu(pos); 
+                    pos-=1;                                  
                     if (pos<1)
                         pos = 4;
-                    al_draw_text(choice, al_map_rgb(255, 255, 255), X / 3 - 40, 350+50*pos, ALLEGRO_ALIGN_LEFT, "Q");
+                    draw_menu(pos);                 
                     al_flip_display();
                     break;
                 case ALLEGRO_KEY_ESCAPE:
@@ -155,7 +149,7 @@ void rotate_sbvb(){
                 case ALLEGRO_KEY_A: //ainda em testes
                     rotate_sbvb();
                     al_flip_display();
-                    draw_menu();
+                    draw_menu(pos);
                     break;
                     
             }
