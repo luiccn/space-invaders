@@ -53,9 +53,7 @@ int draw_menu(int pos=1){
     al_draw_text(choice, al_map_rgb(255, 255, 255), X / 3 - 40, 350+50*pos, ALLEGRO_ALIGN_LEFT, "Q");
     
     //menu options
-      // Texto alinhado à esquerda
     al_draw_text(fonte2, al_map_rgb(0, 235, 0), 10, 10, ALLEGRO_ALIGN_LEFT, "J");
-    // Texto alinhado à direita
     al_draw_text(fonte2, al_map_rgb(0, 235, 0), X - 10, 50, ALLEGRO_ALIGN_RIGHT, "N");
     al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), X / 3, 400, ALLEGRO_ALIGN_LEFT, menuOptions[0]);
     al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), X / 3, 450, ALLEGRO_ALIGN_LEFT, menuOptions[1]);
@@ -81,7 +79,7 @@ void rotate_sbvb(){
         cout << "error" << endl;
   
     
-     float angle=0.5;
+    float angle=0.5;
     for(int i=0; i< 50; i++){
         
         al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -146,6 +144,22 @@ void rotate_sbvb(){
                 case ALLEGRO_KEY_ESCAPE:
                     done = true;
                     break;
+                case ALLEGRO_KEY_ENTER:
+                    switch (pos){
+                        case 1:
+                            //start game
+                            break;
+                        case 2:
+                            //credits
+                            break;
+                        case 3:
+                            rotate_sbvb();
+                            al_flip_display();
+                            break;
+                        case 4:
+                            done = true;
+                            break;
+                    }
                 case ALLEGRO_KEY_A: //ainda em testes
                     rotate_sbvb();
                     al_flip_display();
