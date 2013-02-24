@@ -1,8 +1,8 @@
 /* 
  * File:   main.cpp
- * Author: priscila
+ * Author: Priscila Lima & Luiz Carlos Ciafrino
  *
- * Created on February 21, 2013, 01:22 AM
+ * 
  */
 
 #include <cstdlib>
@@ -39,7 +39,7 @@ int draw_menu(int pos=1){
         cout << "error" << endl;
     
     char *menuOptions[4] = { "Start Game", "Credits", "About this game", "Quit" }; 
-     // Carregando o arquivo de fonte
+     // Loading font files
     fonteMenu = al_load_font("fonts/Squareo.ttf", 39, 0);
     if (!fonteMenu)
     {
@@ -47,7 +47,7 @@ int draw_menu(int pos=1){
         fprintf(stderr, "Falha ao carregar fonte.\n");
         return -1;
     }
-    //plano de fundo
+    // Game wallpaper
     al_draw_bitmap(imagem, 0, 0, 0);
     
     al_draw_text(choice, al_map_rgb(255, 255, 255), X / 3 - 40, 350+50*pos, ALLEGRO_ALIGN_LEFT, "Q");
@@ -98,7 +98,7 @@ void rotate_sbvb(){
  int load_menu(){
      int pos = 1;
      char *menuOptions[4] = { "Start Game", "Credits", "About this game", "Quit" }; 
-     // Carregando o arquivo de fonte
+     // loading font files
     fonteMenu = al_load_font("fonts/Squareo.ttf", 39, 0);
     if (!fonteMenu)
     {
@@ -130,7 +130,6 @@ void rotate_sbvb(){
                     if (pos>4)
                         pos = 1;
                     draw_menu(pos);
-                    //al_draw_text(choice, al_map_rgb(255, 255, 255), X / 3 - 40, 350+50*pos, ALLEGRO_ALIGN_LEFT, "Q");
                     al_flip_display();
                     break;
                 case ALLEGRO_KEY_UP:
@@ -162,7 +161,7 @@ void rotate_sbvb(){
                             break;
                     }
                     break;
-                case ALLEGRO_KEY_A: //ainda em testes
+                case ALLEGRO_KEY_A: 
                     rotate_sbvb();
                     al_flip_display();
                     draw_menu(pos);
@@ -177,7 +176,7 @@ void rotate_sbvb(){
 }
  
  int install_periferics(){
-     // if we get trouble the function returns 1 and close the app
+     // if we have trouble the function returns 1 and close the app
     if ( !al_install_mouse() ){
         return 1; 
     }
@@ -206,7 +205,7 @@ int main(void)
         return -1;
     }
       
-    // Inicialização do add-on para uso de fontes
+    // font addon initialization
     al_init_font_addon();
     
     if (!al_install_audio())
@@ -214,7 +213,7 @@ int main(void)
         fprintf(stderr, "Falha ao inicializar add-on allegro_ttf.\n");
         return -1;
     }
-    // Inicialização dos recursos que serão utilizados
+    // resources initialization
     if (!al_init_ttf_addon())
     {
         fprintf(stderr, "Falha ao inicializar add-on allegro_ttf.\n");
@@ -226,7 +225,7 @@ int main(void)
       return -1;
     }
        
-    // Criação da nossa janela        
+    // main window creation      
     janela = al_create_display(X, Y);
     if (!janela)
     {
@@ -235,7 +234,7 @@ int main(void)
     }
     
     
-    // Carregando outro arquivo de fonte
+    // loading additional font files
     fonte2 = al_load_font("fonts/Space Shop.ttf", 72, 0);
     if (!fonte2)
     {
@@ -246,7 +245,7 @@ int main(void)
     
     load_music();
     
-    // Preenchemos a tela com uma cor
+    // clearing screen to a determined color
     al_clear_to_color(al_map_rgb(255, 220, 220));
     
     if (!al_init_image_addon()){
@@ -259,10 +258,10 @@ int main(void)
     // draw the image on screen
     al_draw_bitmap(imagem, 0, 0, 0);
     
-    // Texto alinhado à esquerda
+    // left aligned text
     al_draw_text(fonte2, al_map_rgb(0, 235, 0), 10, 10, ALLEGRO_ALIGN_LEFT, "J");
  
-    // Texto alinhado à direita
+    // right aligned text
     al_draw_text(fonte2, al_map_rgb(0, 235, 0), X - 10, 50, ALLEGRO_ALIGN_RIGHT, "N");
     
     install_periferics();
@@ -274,10 +273,9 @@ int main(void)
     
     al_flip_display();
      
-    // Tela é exibida por 8 segundos
-  //  al_rest(14.0);
+  
  
-    // Desalocação da fonte e da janela
+    // deallocating fonts and window
     al_destroy_font(fonteMenu);
     al_destroy_display(janela);
     allegro_exit();
