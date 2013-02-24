@@ -148,18 +148,20 @@ void rotate_sbvb(){
                     switch (pos){
                         case 1:
                             //start game
-                            break;
+                            break;                        
                         case 2:
                             //credits
                             break;
                         case 3:
                             rotate_sbvb();
                             al_flip_display();
+                            draw_menu(pos);
                             break;
                         case 4:
                             done = true;
                             break;
                     }
+                    break;
                 case ALLEGRO_KEY_A: //ainda em testes
                     rotate_sbvb();
                     al_flip_display();
