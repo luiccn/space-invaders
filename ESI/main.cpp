@@ -21,12 +21,9 @@
 #include <typeinfo>
 #define X 1024
 #define Y 768
+const float FPS = 1000.0;
 
 using namespace std;
-
-enum KEYS {
-    UP, DOWN, LEFT, RIGHT
-};
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_FONT *fonteMenu = NULL;
@@ -63,77 +60,60 @@ int Game() {
     //    }
     //    al_rest(1.0);
 
-    bool keys[4] = {false, false, false, false};
+    ALLEGRO_KEYBOARD_STATE keyState;
 
+    float speed=10.0;;
+    float toMove=0;
+
+    ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
     ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
     al_register_event_source(event_queue, al_get_keyboard_event_source());
+    al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
+    al_start_timer(timer);
 
     while (!done) {
         ALLEGRO_EVENT events;
         al_wait_for_event(event_queue, &events);
+
         if (events.type == ALLEGRO_EVENT_KEY_DOWN) {
             switch (events.keyboard.keycode) {
-
-                case ALLEGRO_KEY_UP:
-                    keys[UP] = true;
-                    break;
-                case ALLEGRO_KEY_DOWN:
-                    keys[DOWN] = true;
-                    break;
-                case ALLEGRO_KEY_RIGHT:
-                    keys[RIGHT] = true;
-                    break;
-                case ALLEGRO_KEY_LEFT:
-                    keys[LEFT] = true;
-                    break;
                 case ALLEGRO_KEY_ESCAPE:
                     done = true;
-                    break;
             }
         }
-            else if (events.type == ALLEGRO_EVENT_KEY_UP) {
-                switch (events.keyboard.keycode) {
-                    case ALLEGRO_KEY_UP:
-                        keys[UP] = false;
-                        break;
-                    case ALLEGRO_KEY_DOWN:
-                        keys[DOWN] = false;
-                        break;
-                    case ALLEGRO_KEY_RIGHT:
-                        keys[RIGHT] = false;
-                        break;
-                    case ALLEGRO_KEY_LEFT:
-                        keys[LEFT] = false;
-                        break;
-                    case ALLEGRO_KEY_ESCAPE:
-                        done = true;
-                        break;
-                }
-            }
-        
-        al_clear_to_color(al_map_rgb(0, 0, 0));
-        myship.SetX(myship.GetX() + (myship.GetWi() / 5.0)*keys[RIGHT]);
-        myship.DrawChar();
-        
-        al_clear_to_color(al_map_rgb(0, 0, 0));
 
-        myship.SetX(myship.GetX() - (myship.GetWi() / 5.0)*keys[LEFT] );
-        myship.DrawChar();
-        al_flip_display();
-        al_clear_to_color(al_map_rgb(0, 0, 0));
-   
-        
+        if (events.type == ALLEGRO_EVENT_TIMER) {
+            al_get_keyboard_state(&keyState);
+
+            if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
+                toMove += speed;
+            else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
+                toMove -= speed;
+            else if (al_key_down(&keyState, ALLEGRO_KEY_ESCAPE))
+                done=true;
+
         }
 
-    
-    
-    
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+        myship.SetX(myship.GetX() + toMove);
+        myship.DrawChar();
+
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+        myship.SetX(myship.GetX() + toMove);
+        myship.DrawChar();
+        
+        toMove=0;
+
+    }
+
+
+
+
     return 0;
-    
+
 }
-
-
 
 int draw_menu(int pos = 1) {
 

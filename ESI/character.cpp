@@ -45,12 +45,11 @@ int Character::GetY(){
 
 void Character::SetX( int newValue){
 
-    if( newValue <= MAX_X && newValue >= MIN_X && visible){
+    if( newValue <= MAX_X && newValue >= MIN_X){
         x = newValue;
-        DrawChar();
     } else {
     
-        x = newValue;
+        x = GetX();
            
     }
 
@@ -58,12 +57,11 @@ void Character::SetX( int newValue){
 
 void Character::SetY( int newValue){
 
-    if( newValue <= MAX_Y && newValue >= MIN_Y && visible){
+    if( newValue <= MAX_Y && newValue >= MIN_Y){
         y = newValue;
-        DrawChar();
     } else {
     
-        y = newValue;
+        y = GetY();
            
     }
 
