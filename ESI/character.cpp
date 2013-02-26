@@ -91,5 +91,4 @@ void Character::DrawChar(float scaleX, float scaleY){
             (x),
             (y),
             scaleX,scaleY,0,0);
-    al_flip_display();
 }

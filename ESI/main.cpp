@@ -18,6 +18,8 @@
 #include <iostream>
 #include <string>
 #include </home/luiz/work/eduinvaders-code/trunk/ESI/character.h>
+#include </home/luiz/work/eduinvaders-code/trunk/ESI/laser.h>
+
 #include <typeinfo>
 #define X 1366
 #define Y 768
@@ -33,8 +35,11 @@ ALLEGRO_BITMAP *imagem = NULL;
 ALLEGRO_BITMAP *sbvb = NULL;
 ALLEGRO_BITMAP *priscila = NULL;
 ALLEGRO_BITMAP *ship = NULL;
+ALLEGRO_BITMAP *laser = NULL;
 ALLEGRO_SAMPLE *music = NULL;
+
 Character myship;
+Laser mylaser;
 
 bool done = false;
 
@@ -45,26 +50,20 @@ int Game() {
     ship = al_load_bitmap("images/ship.png");
     myship.SetSprite(ship);
 
+    laser = al_load_bitmap("images/gun.png");
+    mylaser.SetSprite(laser);
+
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_draw_text(fonte2, al_map_rgb(0, 235, 0), 10, 10, ALLEGRO_ALIGN_LEFT, "J");
     al_draw_text(fonte2, al_map_rgb(0, 235, 0), X - 10, 10, ALLEGRO_ALIGN_RIGHT, "N");
     myship.DrawChar();
     al_flip_display();
-    //    for(int i=0;i<50;i++){
-    //
-    //        myship.DrawChar();
-    //        al_clear_to_color(al_map_rgb(0, 0, 0));
-    //        myship.SetX(myship.GetX()+myship.GetWi()/15.0);
-    //        myship.DrawChar();
-    //        al_clear_to_color(al_map_rgb(0, 0, 0));
-    //
-    //    }
-    //    al_rest(1.0);
+
 
     ALLEGRO_KEYBOARD_STATE keyState;
-
-    float speed = 10.0;
-    ;
+    float laserspeed = 10.0;
+    float speed = 8.0;
+    float laserMove = 0;
     float toMove = 0;
 
     ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
@@ -82,35 +81,68 @@ int Game() {
             switch (events.keyboard.keycode) {
                 case ALLEGRO_KEY_ESCAPE:
                     done = true;
-            }
+                    break;
+                   
+           
+                }
         }
+        
+        
 
         if (events.type == ALLEGRO_EVENT_TIMER) {
             al_get_keyboard_state(&keyState);
+            
+          
 
-            if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
-                toMove += speed;
-            else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
-                toMove -= speed;
+            if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT)){
+                 if (al_key_down(&keyState, ALLEGRO_KEY_SPACE)){
+                            toMove += speed;
+                            laserMove = 1;}
+                 else toMove += speed;
+            }
+            
+            else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT)){
+                if (al_key_down(&keyState, ALLEGRO_KEY_SPACE)){
+                        toMove -= speed;
+                        laserMove = 1;}
+                else toMove -= speed;
+            }
             else if (al_key_down(&keyState, ALLEGRO_KEY_ESCAPE))
                 done = true;
+            else if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
+                laserMove = 1;
+
 
         }
 
-        al_clear_to_color(al_map_rgb(0, 0, 0));
+       
+        int i = 0;
+
+        if (laserMove) {
+            mylaser.SetX(myship.GetX());
+            mylaser.SetY(myship.GetY());
+            for (int i = 0; i < 15; i++) {
+                mylaser.SetY(mylaser.GetY() - 51.0);
+                mylaser.Shoot();
+                al_clear_to_color(al_map_rgb(0, 0, 0));
+                myship.DrawChar();
+                al_flip_display();
+                laserMove = 0;
+            }
+        }
+
+         al_clear_to_color(al_map_rgb(0, 0, 0));
         myship.SetX(myship.GetX() + toMove);
         myship.DrawChar();
+        al_flip_display();
 
         al_clear_to_color(al_map_rgb(0, 0, 0));
 
         myship.SetX(myship.GetX() + toMove);
         myship.DrawChar();
-
+        al_flip_display();
         toMove = 0;
-
     }
-
-
 
 
     return 0;
@@ -258,6 +290,11 @@ int load_menu() {
                             break;
                         case 2:
                             //credits
+                            imagem = al_load_bitmap("images/credits.png");
+                            al_draw_bitmap(imagem, 0, 0, 0);
+                            al_flip_display();
+                            al_rest(5.0);
+                            draw_menu(pos);
                             break;
                         case 3:
                             rotateTwo("images/ciafrino.png", "images/sbvb.png");

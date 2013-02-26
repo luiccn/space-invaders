@@ -86,15 +86,16 @@ void Laser::SetDead() {
 }
 
 void Laser::Shoot(float scaleX, float scaleY) {
+    int i;
     if (!dead) {
 
         al_draw_scaled_rotated_bitmap(spriteToDraw,
                 GetWi() / 2.0,
                 GetHe(),
                 (x),
-                (y),
+                (y+he),
                 scaleX, scaleY, 0, 0);
-
         al_flip_display();
+        
     }
 }

@@ -46,7 +46,7 @@ public:
        int GetY();
        void SetY( int newValue);
        
-       void Shoot(float scaleX=1, float scaleY=1);
+       void Shoot(float scaleX=1, float scaleY=2);
        
        bool didHit(int targetX, int targetY, int targetWi, int targetHe);
        void SetDead();
