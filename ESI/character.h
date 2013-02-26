@@ -22,7 +22,7 @@ using namespace std;
 
 #ifndef CHARACTER_H
 #define	CHARACTER_H
-#define MAX_X 1024
+#define MAX_X 1366
 #define MIN_X 0
 #define MAX_Y 768
 #define MIN_Y 0

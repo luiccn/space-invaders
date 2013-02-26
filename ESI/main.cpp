@@ -19,7 +19,7 @@
 #include <string>
 #include </home/luiz/work/eduinvaders-code/trunk/ESI/character.h>
 #include <typeinfo>
-#define X 1024
+#define X 1366
 #define Y 768
 const float FPS = 1000.0;
 
@@ -31,6 +31,7 @@ ALLEGRO_FONT *fonte2 = NULL;
 ALLEGRO_FONT *choice = NULL;
 ALLEGRO_BITMAP *imagem = NULL;
 ALLEGRO_BITMAP *sbvb = NULL;
+ALLEGRO_BITMAP *priscila = NULL;
 ALLEGRO_BITMAP *ship = NULL;
 ALLEGRO_SAMPLE *music = NULL;
 Character myship;
@@ -62,8 +63,9 @@ int Game() {
 
     ALLEGRO_KEYBOARD_STATE keyState;
 
-    float speed=10.0;;
-    float toMove=0;
+    float speed = 10.0;
+    ;
+    float toMove = 0;
 
     ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
     ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
@@ -91,7 +93,7 @@ int Game() {
             else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
                 toMove -= speed;
             else if (al_key_down(&keyState, ALLEGRO_KEY_ESCAPE))
-                done=true;
+                done = true;
 
         }
 
@@ -103,8 +105,8 @@ int Game() {
 
         myship.SetX(myship.GetX() + toMove);
         myship.DrawChar();
-        
-        toMove=0;
+
+        toMove = 0;
 
     }
 
@@ -154,9 +156,9 @@ int draw_menu(int pos = 1) {
 
 }
 
-void rotate_sbvb() {
+void rotate(const char * myimg, int quarter = 2) {
 
-    sbvb = al_load_bitmap("images/sbvb.png");
+    sbvb = al_load_bitmap(myimg);
 
 
     if (!sbvb)
@@ -164,22 +166,47 @@ void rotate_sbvb() {
 
 
     float angle = 0.5;
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 120; i++) {
 
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_bitmap(imagem, 0, 0, 0);
-        al_draw_scaled_rotated_bitmap(sbvb, 321 / 2.0, 315 / 2.0, 1024 / 2, 768 / 2, 1.5, 1.5, angle, 0);
+        al_draw_scaled_rotated_bitmap(sbvb, al_get_bitmap_width(sbvb) / 2.0, al_get_bitmap_height(sbvb) / 2.0, X * quarter / 4, Y / 2, 1.5, 1.5, angle, 0);
         al_flip_display();
         angle += 0.1;
     }
+    al_rest(0.3);
+}
+
+void rotateTwo(const char * myimg, const char * myimg2) {
+
+    sbvb = al_load_bitmap(myimg);
+    priscila = al_load_bitmap(myimg2);
+    imagem = al_load_bitmap("images/about.png");
 
 
 
+    float angle = 0.5;
+    for (int i = 0; i < 120; i++) {
+
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+        al_draw_bitmap(imagem, 0, 0, 0);
+        al_draw_scaled_rotated_bitmap(sbvb, al_get_bitmap_width(sbvb) / 2.0, al_get_bitmap_height(sbvb) / 2.0, X / 4, Y / 2, 1.5, 1.5, angle, 0);
+        al_draw_scaled_rotated_bitmap(priscila, al_get_bitmap_width(priscila) / 2.0, al_get_bitmap_height(priscila) / 2.0, X * 3 / 4, Y / 2, 1.5, 1.5, angle, 0);
+        al_flip_display();
+        angle += 0.1;
+    }
+    al_rest(0.3);
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_flip_display();
+    al_draw_bitmap(imagem, 0, 0, 0);
+    al_flip_display();
+    al_rest(8.0);
 }
 
 int load_menu() {
     int pos = 1;
     char *menuOptions[4] = {"Start Game", "Credits", "About this game", "Quit"};
+
     // loading font files
     fonteMenu = al_load_font("fonts/Squareo.ttf", 39, 0);
     if (!fonteMenu) {
@@ -211,7 +238,6 @@ int load_menu() {
                     if (pos > 4)
                         pos = 1;
                     draw_menu(pos);
-                    al_flip_display();
                     break;
                 case ALLEGRO_KEY_UP:
                     draw_menu(pos);
@@ -219,7 +245,6 @@ int load_menu() {
                     if (pos < 1)
                         pos = 4;
                     draw_menu(pos);
-                    al_flip_display();
                     break;
                 case ALLEGRO_KEY_ESCAPE:
                     done = true;
@@ -235,7 +260,7 @@ int load_menu() {
                             //credits
                             break;
                         case 3:
-                            rotate_sbvb();
+                            rotateTwo("images/ciafrino.png", "images/sbvb.png");
                             al_flip_display();
                             draw_menu(pos);
                             break;
@@ -245,7 +270,7 @@ int load_menu() {
                     }
                     break;
                 case ALLEGRO_KEY_A:
-                    rotate_sbvb();
+                    rotate("images/sbvb.png");
                     al_flip_display();
                     draw_menu(pos);
                     break;
@@ -341,7 +366,7 @@ int main(void) {
 
 
 
-    draw_menu();
+    //    draw_menu();
     load_menu();
 
 
