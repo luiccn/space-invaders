@@ -43,111 +43,7 @@ Laser mylaser;
 
 bool done = false;
 
-int Game() {
 
-    fonte2 = al_load_font("fonts/Space Shop.ttf", 72, 0);
-
-    ship = al_load_bitmap("images/ship.png");
-    myship.SetSprite(ship);
-
-    laser = al_load_bitmap("images/gun.png");
-    mylaser.SetSprite(laser);
-
-    al_clear_to_color(al_map_rgb(0, 0, 0));
-    al_draw_text(fonte2, al_map_rgb(0, 235, 0), 10, 10, ALLEGRO_ALIGN_LEFT, "J");
-    al_draw_text(fonte2, al_map_rgb(0, 235, 0), X - 10, 10, ALLEGRO_ALIGN_RIGHT, "N");
-    myship.DrawChar();
-    al_flip_display();
-
-
-    ALLEGRO_KEYBOARD_STATE keyState;
-    float laserspeed = 10.0;
-    float speed = 8.0;
-    float laserMove = 0;
-    float toMove = 0;
-
-    ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
-    ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
-    al_register_event_source(event_queue, al_get_keyboard_event_source());
-    al_register_event_source(event_queue, al_get_timer_event_source(timer));
-
-    al_start_timer(timer);
-
-    while (!done) {
-        ALLEGRO_EVENT events;
-        al_wait_for_event(event_queue, &events);
-
-        if (events.type == ALLEGRO_EVENT_KEY_DOWN) {
-            switch (events.keyboard.keycode) {
-                case ALLEGRO_KEY_ESCAPE:
-                    done = true;
-                    break;
-                   
-           
-                }
-        }
-        
-        
-
-        if (events.type == ALLEGRO_EVENT_TIMER) {
-            al_get_keyboard_state(&keyState);
-            
-          
-
-            if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT)){
-                 if (al_key_down(&keyState, ALLEGRO_KEY_SPACE)){
-                            toMove += speed;
-                            laserMove = 1;}
-                 else toMove += speed;
-            }
-            
-            else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT)){
-                if (al_key_down(&keyState, ALLEGRO_KEY_SPACE)){
-                        toMove -= speed;
-                        laserMove = 1;}
-                else toMove -= speed;
-            }
-            else if (al_key_down(&keyState, ALLEGRO_KEY_ESCAPE))
-                done = true;
-            else if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
-                laserMove = 1;
-
-
-        }
-
-       
-        int i = 0;
-
-        if (laserMove) {
-            mylaser.SetX(myship.GetX());
-            mylaser.SetY(myship.GetY());
-            for (int i = 0; i < 15; i++) {
-                mylaser.SetY(mylaser.GetY() - 51.0);
-                mylaser.Shoot();
-                al_clear_to_color(al_map_rgb(0, 0, 0));
-                myship.DrawChar();
-                al_flip_display();
-                laserMove = 0;
-            }
-        }
-
-         al_clear_to_color(al_map_rgb(0, 0, 0));
-        myship.SetX(myship.GetX() + toMove);
-        myship.DrawChar();
-        al_flip_display();
-
-        al_clear_to_color(al_map_rgb(0, 0, 0));
-
-        myship.SetX(myship.GetX() + toMove);
-        myship.DrawChar();
-        al_flip_display();
-        toMove = 0;
-    }
-
-
-    return 0;
-
-}
 
 int draw_menu(int pos = 1) {
 
@@ -188,6 +84,114 @@ int draw_menu(int pos = 1) {
 
 }
 
+int Game() {
+
+    fonte2 = al_load_font("fonts/Space Shop.ttf", 72, 0);
+
+    ship = al_load_bitmap("images/ship.png");
+    myship.SetSprite(ship);
+
+    laser = al_load_bitmap("images/gun.png");
+    mylaser.SetSprite(laser);
+
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_draw_text(fonte2, al_map_rgb(0, 235, 0), 10, 10, ALLEGRO_ALIGN_LEFT, "J");
+    al_draw_text(fonte2, al_map_rgb(0, 235, 0), X - 10, 10, ALLEGRO_ALIGN_RIGHT, "N");
+    myship.DrawChar();
+    al_flip_display();
+
+    bool donePlaying=0;
+    
+    ALLEGRO_KEYBOARD_STATE keyState;
+    float laserspeed = 10.0;
+    float speed = 12.0;
+    float laserMove = 0;
+    float toMove = 0;
+
+    ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
+    ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
+    al_register_event_source(event_queue, al_get_keyboard_event_source());
+    al_register_event_source(event_queue, al_get_timer_event_source(timer));
+
+    al_start_timer(timer);
+
+    while (!done && !donePlaying) {
+        ALLEGRO_EVENT events;
+        al_wait_for_event(event_queue, &events);
+
+        if (events.type == ALLEGRO_EVENT_KEY_DOWN) {
+            switch (events.keyboard.keycode) {
+                case ALLEGRO_KEY_ESCAPE:
+                    done = true;
+                    break;
+
+
+            }
+        }
+
+
+
+        if (events.type == ALLEGRO_EVENT_TIMER) {
+            al_get_keyboard_state(&keyState);
+
+
+
+            if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT)) {
+                if (al_key_down(&keyState, ALLEGRO_KEY_SPACE)) {
+                    toMove += speed;
+                    laserMove = 1;
+                } else toMove += speed;
+            }
+            else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT)) {
+                if (al_key_down(&keyState, ALLEGRO_KEY_SPACE)) {
+                    toMove -= speed;
+                    laserMove = 1;
+                } else toMove -= speed;
+            } else if (al_key_down(&keyState, ALLEGRO_KEY_ESCAPE))
+                done = true;
+            else if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
+                laserMove = 1;
+            else if (al_key_down(&keyState, ALLEGRO_KEY_B)){
+                donePlaying=1;
+                draw_menu();}
+
+
+        }
+
+
+        int i = 0;
+
+        if (laserMove) {
+            mylaser.SetX(myship.GetX());
+            mylaser.SetY(myship.GetY());
+            for (int i = 0; i < 15; i++) {
+                mylaser.SetY(mylaser.GetY() - 51.0);
+                mylaser.Shoot();
+                al_clear_to_color(al_map_rgb(0, 0, 0));
+                myship.DrawChar();
+                al_flip_display();
+                laserMove = 0;
+            }
+        }
+
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+        myship.SetX(myship.GetX() + toMove);
+        myship.DrawChar();
+        al_flip_display();
+
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+        myship.SetX(myship.GetX() + toMove);
+        myship.DrawChar();
+        al_flip_display();
+        toMove = 0;
+    }
+
+
+    return 0;
+
+}
+
 void rotate(const char * myimg, int quarter = 2) {
 
     sbvb = al_load_bitmap(myimg);
@@ -208,6 +212,8 @@ void rotate(const char * myimg, int quarter = 2) {
     }
     al_rest(0.3);
 }
+
+
 
 void rotateTwo(const char * myimg, const char * myimg2) {
 
@@ -232,8 +238,28 @@ void rotateTwo(const char * myimg, const char * myimg2) {
     al_flip_display();
     al_draw_bitmap(imagem, 0, 0, 0);
     al_flip_display();
-    al_rest(8.0);
+    //al_rest(8.0);
 }
+
+void call_credits() {
+    imagem = al_load_bitmap("images/credits.png");
+    al_draw_bitmap(imagem, 0, 0, 0);
+    al_flip_display();
+    rotateTwo("images/ciafrino.png", "images/sbvb.png");
+
+}
+
+
+void call_about(){
+    imagem = al_load_bitmap("images/about.png");
+    al_draw_bitmap(imagem,0,0,0);
+    al_flip_display();
+           
+}
+
+
+
+
 
 int load_menu() {
     int pos = 1;
@@ -281,6 +307,9 @@ int load_menu() {
                 case ALLEGRO_KEY_ESCAPE:
                     done = true;
                     break;
+                case ALLEGRO_KEY_B: //back to main menu
+                    draw_menu(pos);
+                    break;
                 case ALLEGRO_KEY_ENTER:
                     switch (pos) {
                         case 1:
@@ -290,16 +319,10 @@ int load_menu() {
                             break;
                         case 2:
                             //credits
-                            imagem = al_load_bitmap("images/credits.png");
-                            al_draw_bitmap(imagem, 0, 0, 0);
-                            al_flip_display();
-                            al_rest(5.0);
-                            draw_menu(pos);
+                            call_credits();
                             break;
                         case 3:
-                            rotateTwo("images/ciafrino.png", "images/sbvb.png");
-                            al_flip_display();
-                            draw_menu(pos);
+                            call_about();
                             break;
                         case 4:
                             done = true;
