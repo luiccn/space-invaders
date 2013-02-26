@@ -1,10 +1,12 @@
 /* 
- * File:   character.h
+ * File:   laser.h
  * Author: luiz
  *
- * Created on February 24, 2013, 4:32 PM
+ * Created on February 25, 2013, 8:05 PM
  */
 
+#ifndef LASER_H
+#define	LASER_H
 #include <cstdlib>
 #include <allegro.h>
 #include <allegro5/allegro_font.h>
@@ -18,53 +20,37 @@
 #include <string>
 #include <typeinfo>
 
-using namespace std;
 
-#ifndef CHARACTER_H
-#define	CHARACTER_H
 #define MAX_X 1024
 #define MIN_X 0
 #define MAX_Y 768
 #define MIN_Y 0
 
-class Character{
+class Laser{
 
 public:
-       Character();
-       
+       Laser(ALLEGRO_BITMAP *sprite);
 
-
-       float GetWi();
-       float GetHe();
-       
-       void SetSprite(ALLEGRO_BITMAP *sprite);
-       
        int GetX();
        void SetX( int newValue);
        
        int GetY();
        void SetY( int newValue);
        
-       void DrawChar(float scaleX=1, float scaleY=1);
+       void DrawLaser();
        
-       int GetScore();
-       int setScore(int newValue);
+       bool IsFriendly();
        
-       bool IsDead();
-       void SetDead( bool newValue);
+       bool didHit();
 
 protected:
         int x;
         int y;
-        float wi;
-        float he;
-        int score;
         ALLEGRO_BITMAP *spriteToDraw;
-        
-        bool visible;
-        bool dead;
+  
 
 };
 
-#endif	/* CHARACTER_H */
+
+#endif	/* LASER_H */
 

@@ -1,35 +1,15 @@
 #include "character.h"
 
-Character::Character(){
-    spriteToDraw=NULL;
-    wi=NULL;
-    he=NULL;
-    x = (MAX_X)/2.0;
-    y = MAX_Y;
-  
+Character::Character(ALLEGRO_BITMAP *sprite){
+    
+    spriteToDraw=sprite;
+    x = (MAX_X-al_get_bitmap_width(spriteToDraw))/2.0;
+    y = MAX_Y-al_get_bitmap_height(spriteToDraw);
+    
     visible = true;
     dead = false;
 
 }
-
-void Character::SetSprite(ALLEGRO_BITMAP* sprite){
-    spriteToDraw=sprite;
-    wi=al_get_bitmap_width(spriteToDraw);
-    he=al_get_bitmap_height(spriteToDraw);
-   
-}
-
-float Character::GetWi(){
-
-    return wi;
-}
-
-float Character::GetHe(){
-
-    return he;
-
-}
-
 
 int Character::GetX(){
 
@@ -88,10 +68,9 @@ void Character::SetDead(bool newValue){
 
 
 
-void Character::DrawChar(float scaleX, float scaleY){
-    al_draw_scaled_rotated_bitmap(spriteToDraw,GetWi()/2.0,GetHe(),
-            (x),
-            (y),
-            scaleX,scaleY,0,0);
+void Character::DrawChar(){
+
+    al_draw_bitmap(spriteToDraw,GetX(),GetY(),0);
     al_flip_display();
+
 }
