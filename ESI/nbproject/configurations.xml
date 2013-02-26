@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>character.h</itemPath>
+      <itemPath>enemy.h</itemPath>
       <itemPath>laser.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -15,6 +16,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>character.cpp</itemPath>
+      <itemPath>enemy.cpp</itemPath>
       <itemPath>laser.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>newfile</itemPath>

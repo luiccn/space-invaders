@@ -43,8 +43,6 @@ Laser mylaser;
 
 bool done = false;
 
-
-
 int draw_menu(int pos = 1) {
 
     imagem = al_load_bitmap("images/display.png");
@@ -100,8 +98,8 @@ int Game() {
     myship.DrawChar();
     al_flip_display();
 
-    bool donePlaying=0;
-    
+    bool donePlaying = 0;
+
     ALLEGRO_KEYBOARD_STATE keyState;
     float laserspeed = 10.0;
     float speed = 12.0;
@@ -141,8 +139,7 @@ int Game() {
                     toMove += speed;
                     laserMove = 1;
                 } else toMove += speed;
-            }
-            else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT)) {
+            } else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT)) {
                 if (al_key_down(&keyState, ALLEGRO_KEY_SPACE)) {
                     toMove -= speed;
                     laserMove = 1;
@@ -151,9 +148,10 @@ int Game() {
                 done = true;
             else if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
                 laserMove = 1;
-            else if (al_key_down(&keyState, ALLEGRO_KEY_B)){
-                donePlaying=1;
-                draw_menu();}
+            else if (al_key_down(&keyState, ALLEGRO_KEY_B)) {
+                donePlaying = 1;
+                draw_menu();
+            }
 
 
         }
@@ -165,9 +163,9 @@ int Game() {
             mylaser.SetX(myship.GetX());
             mylaser.SetY(myship.GetY());
             for (int i = 0; i < 15; i++) {
+                al_clear_to_color(al_map_rgb(0, 0, 0));
                 mylaser.SetY(mylaser.GetY() - 51.0);
                 mylaser.Shoot();
-                al_clear_to_color(al_map_rgb(0, 0, 0));
                 myship.DrawChar();
                 al_flip_display();
                 laserMove = 0;
@@ -213,8 +211,6 @@ void rotate(const char * myimg, int quarter = 2) {
     al_rest(0.3);
 }
 
-
-
 void rotateTwo(const char * myimg, const char * myimg2) {
 
     sbvb = al_load_bitmap(myimg);
@@ -249,17 +245,12 @@ void call_credits() {
 
 }
 
-
-void call_about(){
+void call_about() {
     imagem = al_load_bitmap("images/about.png");
-    al_draw_bitmap(imagem,0,0,0);
+    al_draw_bitmap(imagem, 0, 0, 0);
     al_flip_display();
-           
+
 }
-
-
-
-
 
 int load_menu() {
     int pos = 1;
