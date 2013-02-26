@@ -36,7 +36,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/character.o
+	${OBJECTDIR}/character.o \
+	${OBJECTDIR}/laser.o
 
 
 # C Compiler Flags
@@ -72,6 +73,11 @@ ${OBJECTDIR}/character.o: character.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/character.o character.cpp
+
+${OBJECTDIR}/laser.o: laser.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/laser.o laser.cpp
 
 # Subprojects
 .build-subprojects:

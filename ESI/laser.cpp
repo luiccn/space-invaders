@@ -1,76 +1,100 @@
-#include "character.h"
+#include "laser.h"
 
-Character::Character(ALLEGRO_BITMAP *sprite){
-    
-    spriteToDraw=sprite;
-    x = (MAX_X-al_get_bitmap_width(spriteToDraw))/2.0;
-    y = MAX_Y-al_get_bitmap_height(spriteToDraw);
-    
-    visible = true;
+Laser::Laser() {
+    spriteToDraw = NULL;
+    wi = NULL;
+    he = NULL;
+    x = MAX_X;
+    y = MAX_Y;
+
     dead = false;
 
 }
 
-int Character::GetX(){
+void Laser::SetSprite(ALLEGRO_BITMAP* sprite) {
+    spriteToDraw = sprite;
+    wi = al_get_bitmap_width(spriteToDraw);
+    he = al_get_bitmap_height(spriteToDraw);
+
+}
+
+float Laser::GetWi() {
+
+    return wi;
+}
+
+float Laser::GetHe() {
+
+    return he;
+
+}
+
+int Laser::GetX() {
 
     return x;
 
 }
 
-int Character::GetY(){
+int Laser::GetY() {
 
     return y;
 
 }
 
-void Character::SetX( int newValue){
+void Laser::SetX(int newValue) {
 
-    if( newValue <= MAX_X && newValue >= MIN_X && visible){
+    if (newValue <= MAX_X && newValue >= MIN_X) {
         x = newValue;
-        DrawChar();
     } else {
-    
-        x = newValue;
-           
+
+        x = GetX();
+
     }
 
 }
 
-void Character::SetY( int newValue){
+void Laser::SetY(int newValue) {
 
-    if( newValue <= MAX_Y && newValue >= MIN_Y && visible){
+    if (newValue <= MAX_Y && newValue >= MIN_Y) {
         y = newValue;
-        DrawChar();
     } else {
-    
-        y = newValue;
-           
+
+        y = GetY();
+
     }
 
 }
 
-bool Character::IsDead(){
+//targetX and Y is the central point of the target Bitmap
 
-    return dead;
-}
-
-void Character::SetDead(bool newValue){
-
-    visible = (!newValue);
-    dead = newValue;
-
-    if(dead){
-        SetY(MAX_Y);
-        SetX(MAX_X/2);
+bool Laser::didHit(int targetX, int targetY, int targetWi, int targetHe) {
+    if (x <= targetX + 0.5 * targetWi &&
+            x >= targetX - 0.5 * targetWi &&
+            y <= targetY + 0.5 * targetHe &&
+            y >= targetY - 0.5 * targetHe) {
+        return true;
+        SetDead();
     }
+    else return false;
 
 }
 
+void Laser::SetDead() {
 
+    dead = true;
 
-void Character::DrawChar(){
+}
 
-    al_draw_bitmap(spriteToDraw,GetX(),GetY(),0);
-    al_flip_display();
+void Laser::Shoot(float scaleX, float scaleY) {
+    if (!dead) {
 
+        al_draw_scaled_rotated_bitmap(spriteToDraw,
+                GetWi() / 2.0,
+                GetHe(),
+                (x),
+                (y),
+                scaleX, scaleY, 0, 0);
+
+        al_flip_display();
+    }
 }

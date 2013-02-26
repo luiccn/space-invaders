@@ -20,8 +20,10 @@
 #include <string>
 #include <typeinfo>
 
+using namespace std;
 
-#define MAX_X 1024
+
+#define MAX_X 1366
 #define MIN_X 0
 #define MAX_Y 768
 #define MIN_Y 0
@@ -29,27 +31,38 @@
 class Laser{
 
 public:
-       Laser(ALLEGRO_BITMAP *sprite);
+       Laser();
+       
 
+
+       float GetWi();
+       float GetHe();
+       
+       void SetSprite(ALLEGRO_BITMAP *sprite);
+       
        int GetX();
        void SetX( int newValue);
        
        int GetY();
        void SetY( int newValue);
        
-       void DrawLaser();
+       void Shoot(float scaleX=1, float scaleY=1);
        
-       bool IsFriendly();
-       
-       bool didHit();
+       bool didHit(int targetX, int targetY, int targetWi, int targetHe);
+       void SetDead();
 
 protected:
         int x;
         int y;
+        float wi;
+        float he;
+        int score;
         ALLEGRO_BITMAP *spriteToDraw;
-  
+        
+        bool dead;
 
 };
+
 
 
 #endif	/* LASER_H */
