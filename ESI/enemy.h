@@ -33,7 +33,6 @@ class Enemy{
 public:
        Enemy();
        
-
        void Draw(float scaleX=1, float scaleY=1);
        float GetWi();
        float GetHe();

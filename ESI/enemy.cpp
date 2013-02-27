@@ -71,6 +71,9 @@ void Enemy::SetDead() {
 
 }
 
+
+
+
 void Enemy::Draw(float scaleX, float scaleY) {
     int i;
     if (!dead) {

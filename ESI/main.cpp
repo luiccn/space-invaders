@@ -19,10 +19,13 @@
 #include <string>
 #include </home/luiz/work/eduinvaders-code/trunk/ESI/character.h>
 #include </home/luiz/work/eduinvaders-code/trunk/ESI/laser.h>
+#include </home/luiz/work/eduinvaders-code/trunk/ESI/enemy.h>
+
 
 #include <typeinfo>
 #define X 1366
 #define Y 768
+#define NUM_ENEMIES 29
 const float FPS = 1000.0;
 
 using namespace std;
@@ -34,12 +37,14 @@ ALLEGRO_FONT *choice = NULL;
 ALLEGRO_BITMAP *imagem = NULL;
 ALLEGRO_BITMAP *sbvb = NULL;
 ALLEGRO_BITMAP *priscila = NULL;
+ALLEGRO_BITMAP *enemy = NULL;
 ALLEGRO_BITMAP *ship = NULL;
 ALLEGRO_BITMAP *laser = NULL;
 ALLEGRO_SAMPLE *music = NULL;
 
 Character myship;
 Laser mylaser;
+Enemy myenemy[NUM_ENEMIES];
 
 bool done = false;
 
@@ -84,6 +89,11 @@ int draw_menu(int pos = 1) {
 
 int Game() {
 
+
+    int i = 0;
+    int j = 0;
+    int k = 0;
+
     fonte2 = al_load_font("fonts/Space Shop.ttf", 72, 0);
 
     ship = al_load_bitmap("images/ship.png");
@@ -91,6 +101,19 @@ int Game() {
 
     laser = al_load_bitmap("images/gun.png");
     mylaser.SetSprite(laser);
+
+    enemy = al_load_bitmap("images/m1_0.png");
+
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+
+    for (i = 0; i < NUM_ENEMIES; i++) {
+        myenemy[i].SetSprite(enemy);
+        myenemy[i].SetX((X * i / NUM_ENEMIES) + myenemy[i].GetWi() - 5);
+        myenemy[i].SetY(0);
+    }
+
+
+
 
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_draw_text(fonte2, al_map_rgb(0, 235, 0), 10, 10, ALLEGRO_ALIGN_LEFT, "J");
@@ -117,6 +140,7 @@ int Game() {
         ALLEGRO_EVENT events;
         al_wait_for_event(event_queue, &events);
 
+
         if (events.type == ALLEGRO_EVENT_KEY_DOWN) {
             switch (events.keyboard.keycode) {
                 case ALLEGRO_KEY_ESCAPE:
@@ -131,6 +155,8 @@ int Game() {
 
         if (events.type == ALLEGRO_EVENT_TIMER) {
             al_get_keyboard_state(&keyState);
+
+
 
 
 
@@ -156,32 +182,47 @@ int Game() {
 
         }
 
-
-        int i = 0;
+        al_clear_to_color(al_map_rgb(0, 0, 0));
 
         if (laserMove) {
             mylaser.SetX(myship.GetX());
             mylaser.SetY(myship.GetY());
-            for (int i = 0; i < 15; i++) {
+            for (int k = 0; k < 15; k++) {
                 al_clear_to_color(al_map_rgb(0, 0, 0));
                 mylaser.SetY(mylaser.GetY() - 51.0);
                 mylaser.Shoot();
                 myship.DrawChar();
+
+                for (i = 0; i < NUM_ENEMIES; i++) {
+                    if (mylaser.didHit(myenemy[i].GetX(), myenemy[i].GetY(), myenemy[i].GetWi(), myenemy[i].GetHe())) {
+                        myenemy[i].SetDead();
+                    }
+                    
+                    
+                    else myenemy[i].Draw();
+
+                }
+
                 al_flip_display();
                 laserMove = 0;
             }
         }
 
-        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+        for (i = 0; i < NUM_ENEMIES; i++) {
+            myenemy[i].SetY((j / 10) + myenemy[i].GetHe());
+            myenemy[i].Draw();
+        }
+
+        j++;
+
+
+
         myship.SetX(myship.GetX() + toMove);
         myship.DrawChar();
         al_flip_display();
 
-        al_clear_to_color(al_map_rgb(0, 0, 0));
 
-        myship.SetX(myship.GetX() + toMove);
-        myship.DrawChar();
-        al_flip_display();
         toMove = 0;
     }
 
