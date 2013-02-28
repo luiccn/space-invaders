@@ -16,6 +16,7 @@
 #include <allegro5/keyboard.h>
 #include <stdio.h>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include </home/luiz/work/eduinvaders-code/trunk/ESI/character.h>
 #include </home/luiz/work/eduinvaders-code/trunk/ESI/laser.h>
@@ -37,6 +38,8 @@ ALLEGRO_FONT *choice = NULL;
 ALLEGRO_BITMAP *imagem = NULL;
 ALLEGRO_BITMAP *sbvb = NULL;
 ALLEGRO_BITMAP *priscila = NULL;
+ALLEGRO_BITMAP *credit = NULL;
+
 ALLEGRO_BITMAP *enemy = NULL;
 ALLEGRO_BITMAP *ship = NULL;
 ALLEGRO_BITMAP *laser = NULL;
@@ -46,7 +49,20 @@ Character myship;
 Laser mylaser;
 Enemy myenemy[NUM_ENEMIES];
 
+
+
+
 bool done = false;
+
+const char * intToChar(int i) {
+    stringstream sst;
+    string mystr;
+    const char * ret;
+    sst << i;
+    mystr = sst.str();
+    ret = mystr.c_str();
+    return ret;
+}
 
 int draw_menu(int pos = 1) {
 
@@ -87,6 +103,17 @@ int draw_menu(int pos = 1) {
 
 }
 
+void Won() {
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_load_bitmap("images/won.png");
+    al_draw_bitmap(imagem, 0, 0, 0);
+    al_flip_display();
+    al_rest(5.0);
+    draw_menu();
+
+
+}
+
 int Game() {
 
 
@@ -94,6 +121,7 @@ int Game() {
     int j = 0;
     int k = 0;
 
+    fonteMenu = al_load_font("fonts/Squareo.ttf", 30, 0);
     fonte2 = al_load_font("fonts/Space Shop.ttf", 72, 0);
 
     ship = al_load_bitmap("images/ship.png");
@@ -106,10 +134,14 @@ int Game() {
 
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
+    al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), 0, 0, ALLEGRO_ALIGN_LEFT, "SCORE");
+    al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), 100, 0, ALLEGRO_ALIGN_LEFT, intToChar(myship.GetScore()));
+
+    al_flip_display();
     for (i = 0; i < NUM_ENEMIES; i++) {
         myenemy[i].SetSprite(enemy);
         myenemy[i].SetX((X * i / NUM_ENEMIES) + myenemy[i].GetWi() - 5);
-        myenemy[i].SetY(0);
+        myenemy[i].SetY(25);
     }
 
 
@@ -118,6 +150,8 @@ int Game() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_draw_text(fonte2, al_map_rgb(0, 235, 0), 10, 10, ALLEGRO_ALIGN_LEFT, "J");
     al_draw_text(fonte2, al_map_rgb(0, 235, 0), X - 10, 10, ALLEGRO_ALIGN_RIGHT, "N");
+    al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), 0, 0, ALLEGRO_ALIGN_LEFT, "SCORE");
+    al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), 100, 0, ALLEGRO_ALIGN_LEFT, intToChar(myship.GetScore()));
     myship.DrawChar();
     al_flip_display();
 
@@ -140,6 +174,11 @@ int Game() {
         ALLEGRO_EVENT events;
         al_wait_for_event(event_queue, &events);
 
+
+        if (myship.GetScore() == 100 * NUM_ENEMIES) {
+            donePlaying=1;
+            Won();
+        }
 
         if (events.type == ALLEGRO_EVENT_KEY_DOWN) {
             switch (events.keyboard.keycode) {
@@ -164,12 +203,20 @@ int Game() {
                 if (al_key_down(&keyState, ALLEGRO_KEY_SPACE)) {
                     toMove += speed;
                     laserMove = 1;
+                } else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT)) {
+                    toMove += 0;
                 } else toMove += speed;
+
+
             } else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT)) {
                 if (al_key_down(&keyState, ALLEGRO_KEY_SPACE)) {
                     toMove -= speed;
                     laserMove = 1;
+                } else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT)) {
+                    toMove += 0;
                 } else toMove -= speed;
+
+
             } else if (al_key_down(&keyState, ALLEGRO_KEY_ESCAPE))
                 done = true;
             else if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
@@ -189,17 +236,20 @@ int Game() {
             mylaser.SetY(myship.GetY());
             for (int k = 0; k < 15; k++) {
                 al_clear_to_color(al_map_rgb(0, 0, 0));
+                al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), 0, 0, ALLEGRO_ALIGN_LEFT, "SCORE");
+                al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), 100, 0, ALLEGRO_ALIGN_LEFT, intToChar(myship.GetScore()));
                 mylaser.SetY(mylaser.GetY() - 51.0);
                 mylaser.Shoot();
                 myship.DrawChar();
 
                 for (i = 0; i < NUM_ENEMIES; i++) {
-                    if (mylaser.didHit(myenemy[i].GetX(), myenemy[i].GetY(), myenemy[i].GetWi(), myenemy[i].GetHe())) {
+                    cout << myenemy[i].GetX() <<  " | " <<myenemy[i].GetY() << " | ";
+                    cout << mylaser.GetX() << " | " << mylaser.GetY() << endl;
+                    if (mylaser.didHit(myenemy[i].GetX(), myenemy[i].GetY(), myenemy[i].GetWi(), myenemy[i].GetHe())   && !myenemy[i].isDead()) {
                         myenemy[i].SetDead();
-                    }
-                    
-                    
-                    else myenemy[i].Draw();
+                        if (myenemy[i].isDead() == true)myship.setScore(myship.GetScore() + 100);
+                        
+                    } else myenemy[i].Draw();
 
                 }
 
@@ -220,6 +270,8 @@ int Game() {
 
         myship.SetX(myship.GetX() + toMove);
         myship.DrawChar();
+        al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), 0, 0, ALLEGRO_ALIGN_LEFT, "SCORE");
+        al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), 100, 0, ALLEGRO_ALIGN_LEFT, intToChar(myship.GetScore()));
         al_flip_display();
 
 
@@ -256,7 +308,7 @@ void rotateTwo(const char * myimg, const char * myimg2) {
 
     sbvb = al_load_bitmap(myimg);
     priscila = al_load_bitmap(myimg2);
-    imagem = al_load_bitmap("images/about.png");
+    imagem = al_load_bitmap("images/credits.png");
 
 
 
@@ -279,10 +331,11 @@ void rotateTwo(const char * myimg, const char * myimg2) {
 }
 
 void call_credits() {
-    imagem = al_load_bitmap("images/credits.png");
-    al_draw_bitmap(imagem, 0, 0, 0);
+    credit = al_load_bitmap("images/credits.png");
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_draw_bitmap(credit, 0, 0, 0);
     al_flip_display();
-    rotateTwo("images/ciafrino.png", "images/sbvb.png");
+    rotateTwo("images/ciafrino.png", "images/priscila.png");
 
 }
 
@@ -406,7 +459,7 @@ int main(void) {
 
 
 
-    al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+    //    al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 
     // the library
     if (!al_init()) {

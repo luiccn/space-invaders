@@ -68,10 +68,10 @@ void Laser::SetY(int newValue) {
 //targetX and Y is the central point of the target Bitmap
 
 bool Laser::didHit(int targetX, int targetY, int targetWi, int targetHe) {
-    if (x <= targetX + targetWi &&
-            x >= targetX -   targetWi &&
-            y <= targetY +   targetHe &&
-            y >= targetY -   targetHe) {
+    if (x <= targetX + 0.6*targetWi &&
+            x >= targetX -   0.6*targetWi &&
+            y <= targetY +   0.6*targetHe &&
+            y >= targetY -   0.6*targetHe) {
         return true;
         SetDead();
     }

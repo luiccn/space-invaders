@@ -62,6 +62,11 @@ void Enemy::SetY(int newValue) {
 
 }
 
+
+bool Enemy::isDead(){
+    return dead;
+}
+
 //targetX and Y is the central point of the target Bitmap
 
 

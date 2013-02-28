@@ -46,6 +46,7 @@ public:
        void SetY( int newValue);
        
        void SetDead();
+       bool isDead();
 
 protected:
         int x;

@@ -48,7 +48,7 @@ public:
        void DrawChar(float scaleX=1, float scaleY=1);
        
        int GetScore();
-       int setScore(int newValue);
+       void setScore(int newValue);
        
        bool IsDead();
        void SetDead( bool newValue);

@@ -6,6 +6,7 @@ Character::Character(){
     he=NULL;
     x = (MAX_X)/2.0;
     y = MAX_Y;
+    score=0;
   
     visible = true;
     dead = false;
@@ -17,6 +18,14 @@ void Character::SetSprite(ALLEGRO_BITMAP* sprite){
     wi=al_get_bitmap_width(spriteToDraw);
     he=al_get_bitmap_height(spriteToDraw);
    
+}
+
+void Character::setScore(int newValue){
+    score=newValue;
+}
+
+int Character::GetScore(){
+    return score;
 }
 
 float Character::GetWi(){
