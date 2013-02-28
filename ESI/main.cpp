@@ -104,14 +104,22 @@ int draw_menu(int pos = 1) {
 }
 
 void Won() {
+
     al_clear_to_color(al_map_rgb(0, 0, 0));
-    al_load_bitmap("images/won.png");
+    imagem=al_load_bitmap("images/won.png");
+
     al_draw_bitmap(imagem, 0, 0, 0);
     al_flip_display();
-    al_rest(5.0);
-    draw_menu();
+    al_rest(2.0);
+}
 
+void Lost() {
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    imagem=al_load_bitmap("images/lost.png");
 
+    al_draw_bitmap(imagem, 0, 0, 0);
+    al_flip_display();
+    al_rest(2.0);
 }
 
 int Game() {
@@ -176,8 +184,10 @@ int Game() {
 
 
         if (myship.GetScore() == 100 * NUM_ENEMIES) {
-            donePlaying=1;
+            donePlaying = 1;
             Won();
+            draw_menu();
+            break;
         }
 
         if (events.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -243,12 +253,12 @@ int Game() {
                 myship.DrawChar();
 
                 for (i = 0; i < NUM_ENEMIES; i++) {
-                    cout << myenemy[i].GetX() <<  " | " <<myenemy[i].GetY() << " | ";
-                    cout << mylaser.GetX() << " | " << mylaser.GetY() << endl;
-                    if (mylaser.didHit(myenemy[i].GetX(), myenemy[i].GetY(), myenemy[i].GetWi(), myenemy[i].GetHe())   && !myenemy[i].isDead()) {
+
+
+                    if (mylaser.didHit(myenemy[i].GetX(), myenemy[i].GetY(), myenemy[i].GetWi(), myenemy[i].GetHe()) && !myenemy[i].isDead()) {
                         myenemy[i].SetDead();
                         if (myenemy[i].isDead() == true)myship.setScore(myship.GetScore() + 100);
-                        
+
                     } else myenemy[i].Draw();
 
                 }
@@ -260,7 +270,14 @@ int Game() {
 
 
         for (i = 0; i < NUM_ENEMIES; i++) {
-            myenemy[i].SetY((j / 10) + myenemy[i].GetHe());
+            myenemy[i].SetY((j / 5.0) + myenemy[i].GetHe());
+
+            if (myenemy[i].GetY() >= Y-2*myship.GetHe()) {
+                donePlaying = 1;
+                Lost();
+                draw_menu();
+                break;
+            }
             myenemy[i].Draw();
         }
 
