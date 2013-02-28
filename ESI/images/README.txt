@@ -1,1 +1,0 @@
-- melhor dobrar o tam das sprites no jogo
