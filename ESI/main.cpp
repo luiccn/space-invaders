@@ -477,8 +477,8 @@ int install_periferics() {
 void load_music() {
     al_install_audio();
     al_init_acodec_addon();
-    music = al_load_sample("sound/intro.flac");
-    ASSERT(music);
+    music = al_load_sample("sound/intro.ogg");
+    cout << music << endl;
     al_play_sample(music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
 }
 
