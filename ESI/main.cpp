@@ -111,6 +111,7 @@ int draw_menu(int pos = 1) {
 }
 
 void How() {
+    fonteMenu = al_load_font("fonts/Squareo.ttf", 40, 0);
 
     int go = 0;
     ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
@@ -122,6 +123,8 @@ void How() {
         al_clear_to_color(al_map_rgb(0, 0, 0));
         imagem = al_load_bitmap("images/how.png");
         al_draw_bitmap(imagem, 0, 0, 0);
+        al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), X/2, Y-60, ALLEGRO_ALIGN_CENTRE, "PRESS ENTER TO CONTINUE");
+
         al_flip_display();
         al_wait_for_event(event_queue, &events);
         if (events.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -276,8 +279,7 @@ int Game() {
                     theme = 1;
                     Game();
                 }
-            }
-            else if (al_key_down(&keyState, ALLEGRO_KEY_H)) {
+            } else if (al_key_down(&keyState, ALLEGRO_KEY_H)) {
                 How();
                 Game();
             }
