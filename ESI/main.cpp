@@ -140,7 +140,6 @@ int Game() {
     ship = al_load_bitmap(shipC[theme]);
     myship.SetSprite(ship);
 
-    cout << laserC[theme] << endl;
     laser = al_load_bitmap(laserC[theme]);
     mylaser.SetSprite(laser);
 
@@ -478,7 +477,8 @@ int install_periferics() {
 void load_music() {
     al_install_audio();
     al_init_acodec_addon();
-    music = al_load_sample("sound/intro.ogg");
+    music = al_load_sample("sound/intro.flac");
+    ASSERT(music);
     al_play_sample(music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
 }
 
@@ -558,6 +558,7 @@ int main(void) {
     // deallocating fonts and window
     al_destroy_font(fonteMenu);
     al_destroy_display(janela);
+    al_destroy_sample(music);
     allegro_exit();
 
     return 0;
