@@ -49,8 +49,15 @@ Character myship;
 Laser mylaser;
 Enemy myenemy[NUM_ENEMIES];
 
+const char * laserC[] = {"images/gun1.png", "images/gun2.png"};
+const char * shipC[] = {"images/ship1.png", "images/ship2.png"};
+const char * enemyC[] = {"images/m1_0.png", "images/m1_2.png"};
 
+int i = 0;
+int j = 0;
+int k = 0;
 
+int theme = 0;
 
 bool done = false;
 
@@ -106,7 +113,7 @@ int draw_menu(int pos = 1) {
 void Won() {
 
     al_clear_to_color(al_map_rgb(0, 0, 0));
-    imagem=al_load_bitmap("images/won.png");
+    imagem = al_load_bitmap("images/won.png");
 
     al_draw_bitmap(imagem, 0, 0, 0);
     al_flip_display();
@@ -115,7 +122,7 @@ void Won() {
 
 void Lost() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
-    imagem=al_load_bitmap("images/lost.png");
+    imagem = al_load_bitmap("images/lost.png");
 
     al_draw_bitmap(imagem, 0, 0, 0);
     al_flip_display();
@@ -125,20 +132,19 @@ void Lost() {
 int Game() {
 
 
-    int i = 0;
-    int j = 0;
-    int k = 0;
+
 
     fonteMenu = al_load_font("fonts/Squareo.ttf", 30, 0);
     fonte2 = al_load_font("fonts/Space Shop.ttf", 72, 0);
 
-    ship = al_load_bitmap("images/ship.png");
+    ship = al_load_bitmap(shipC[theme]);
     myship.SetSprite(ship);
 
-    laser = al_load_bitmap("images/gun.png");
+    cout << laserC[theme] << endl;
+    laser = al_load_bitmap(laserC[theme]);
     mylaser.SetSprite(laser);
 
-    enemy = al_load_bitmap("images/m1_0.png");
+    enemy = al_load_bitmap(enemyC[theme]);
 
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
@@ -156,8 +162,7 @@ int Game() {
 
 
     al_clear_to_color(al_map_rgb(0, 0, 0));
-    al_draw_text(fonte2, al_map_rgb(0, 235, 0), 10, 10, ALLEGRO_ALIGN_LEFT, "J");
-    al_draw_text(fonte2, al_map_rgb(0, 235, 0), X - 10, 10, ALLEGRO_ALIGN_RIGHT, "N");
+
     al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), 0, 0, ALLEGRO_ALIGN_LEFT, "SCORE");
     al_draw_text(fonteMenu, al_map_rgb(50, 200, 115), 100, 0, ALLEGRO_ALIGN_LEFT, intToChar(myship.GetScore()));
     myship.DrawChar();
@@ -234,7 +239,20 @@ int Game() {
             else if (al_key_down(&keyState, ALLEGRO_KEY_B)) {
                 donePlaying = 1;
                 draw_menu();
+            } else if (al_key_down(&keyState, ALLEGRO_KEY_1)) {
+                if (theme != 0) {
+                    theme = 0;
+                    Game();
+                }
+
+            } else if (al_key_down(&keyState, ALLEGRO_KEY_2)) {
+                if (theme != 1) {
+                    theme = 1;
+                    Game();
+                }
             }
+
+
 
 
         }
@@ -272,7 +290,7 @@ int Game() {
         for (i = 0; i < NUM_ENEMIES; i++) {
             myenemy[i].SetY((j / 5.0) + myenemy[i].GetHe());
 
-            if (myenemy[i].GetY() >= Y-2*myship.GetHe()) {
+            if (myenemy[i].GetY() >= Y - 2 * myship.GetHe()) {
                 donePlaying = 1;
                 Lost();
                 draw_menu();
