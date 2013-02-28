@@ -148,6 +148,7 @@ void Won() {
     al_draw_bitmap(imagem, 0, 0, 0);
     al_flip_display();
     al_rest(2.0);
+    draw_menu();
 }
 
 void Lost() {
@@ -157,6 +158,7 @@ void Lost() {
     al_draw_bitmap(imagem, 0, 0, 0);
     al_flip_display();
     al_rest(2.0);
+    draw_menu();
 }
 
 int Game() {
@@ -220,7 +222,7 @@ int Game() {
         if (myship.GetScore() == 100 * NUM_ENEMIES) {
             donePlaying = 1;
             Won();
-            draw_menu();
+            
             break;
         }
 
@@ -525,7 +527,7 @@ int main(void) {
 
 
 
-    //    al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+    al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 
     // the library
     if (!al_init()) {
