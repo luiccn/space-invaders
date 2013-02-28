@@ -39,7 +39,7 @@ ALLEGRO_BITMAP *imagem = NULL;
 ALLEGRO_BITMAP *sbvb = NULL;
 ALLEGRO_BITMAP *priscila = NULL;
 ALLEGRO_BITMAP *credit = NULL;
-
+ALLEGRO_BITMAP *howto = NULL;
 ALLEGRO_BITMAP *enemy = NULL;
 ALLEGRO_BITMAP *ship = NULL;
 ALLEGRO_BITMAP *laser = NULL;
@@ -108,6 +108,33 @@ int draw_menu(int pos = 1) {
 
     al_flip_display();
 
+}
+
+void How() {
+
+    int go = 0;
+    ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
+    al_register_event_source(event_queue, al_get_keyboard_event_source());
+
+
+    while (!go) {
+        ALLEGRO_EVENT events;
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+        imagem = al_load_bitmap("images/how.png");
+        al_draw_bitmap(imagem, 0, 0, 0);
+        al_flip_display();
+        al_wait_for_event(event_queue, &events);
+        if (events.type == ALLEGRO_EVENT_KEY_DOWN) {
+            switch (events.keyboard.keycode) {
+
+                case ALLEGRO_KEY_ENTER:
+                    go = 1;
+                    break;
+
+
+            }
+        }
+    }
 }
 
 void Won() {
@@ -249,6 +276,10 @@ int Game() {
                     theme = 1;
                     Game();
                 }
+            }
+            else if (al_key_down(&keyState, ALLEGRO_KEY_H)) {
+                How();
+                Game();
             }
 
 
@@ -478,12 +509,10 @@ void load_music() {
     al_install_audio();
     al_init_acodec_addon();
     music = al_load_sample("sound/intro.ogg");
-    cout << music << endl;
     al_play_sample(music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
 }
 
 int main(void) {
-
 
 
 
@@ -545,6 +574,8 @@ int main(void) {
     install_periferics();
 
 
+
+    How();
 
     //    draw_menu();
     load_menu();
